@@ -1,0 +1,742 @@
+--Script Banco de Dados --
+
+DROP TABLE prescricao_medicamentos CASCADE CONSTRAINTS;
+DROP TABLE prescricao CASCADE CONSTRAINTS;
+DROP TABLE receituario_patologias cascade CONSTRAINTS;
+DROP TABLE receituario cascade CONSTRAINTS;
+DROP TABLE medico_procedimentos cascade CONSTRAINTS;
+DROP TABLE paciente_has_telefone cascade CONSTRAINTS;
+DROP TABLE funcionario_has_telefone cascade CONSTRAINTS;
+DROP TABLE paciente_has_endereco cascade CONSTRAINTS;
+DROP TABLE consulta_exames cascade CONSTRAINTS;
+DROP TABLE procedimentos_estoque cascade CONSTRAINTS;
+DROP TABLE consulta cascade CONSTRAINTS;
+DROP TABLE procedimentos cascade CONSTRAINTS;
+DROP TABLE medico_exames cascade CONSTRAINTS;
+DROP TABLE agenda_exames cascade CONSTRAINTS;
+DROP TABLE agenda cascade CONSTRAINTS;
+DROP TABLE exames_estoque cascade CONSTRAINTS;
+DROP TABLE resultados cascade CONSTRAINTS;
+DROP TABLE funcionario CASCADE CONSTRAINTS;
+DROP TABLE medicamentos cascade CONSTRAINTS;
+DROP TABLE paciente CASCADE CONSTRAINTS;
+DROP TABLE cadastro_patologias cascade CONSTRAINTS;
+DROP TABLE telefone cascade CONSTRAINTS;
+DROP TABLE plano_de_saude cascade CONSTRAINTS;
+DROP TABLE medico cascade CONSTRAINTS;
+DROP TABLE exames cascade CONSTRAINTS;
+DROP TABLE estoque cascade CONSTRAINTS;
+DROP TABLE endereco cascade CONSTRAINTS;
+
+
+
+CREATE TABLE endereco 
+(
+  cod_endereco INTEGER   NOT NULL,
+  tipo_logradouro VARCHAR (30),
+  logradouro VARCHAR (30),
+  numero INTEGER,
+  cep INTEGER,
+  complemento VARCHAR (30),
+  bairro VARCHAR (30),
+  cidade VARCHAR (30),
+  uf VARCHAR (30),
+  tipo INTEGER,
+PRIMARY KEY(cod_endereco));
+
+INSERT INTO endereco VALUES (1, 'RUA', 'a', 20, 05015000, 'ap 52', 
+'perdizes', 'São Paulo', 'SP', 1) ;
+INSERT INTO endereco VALUES (2, 'AV', 'b', 30, 05015001, '', 
+'freguesia', 'São Paulo', 'SP', 1);
+INSERT INTO endereco VALUES (3, 'ALAMEDA', 'c', 40, 05015002, 'ap 70', 
+'limão', 'São Paulo', 'SP', 1);
+INSERT INTO endereco VALUES (4, 'RUA', 'castro alves', 40, 35070710, ' 
+', 'Santo André', 'Curitiba', 'PR', 1) ;
+INSERT INTO endereco VALUES (5, 'RUA', 'Ministro Jose', 78, 04324480, ' 
+', 'Jacarezinho', 'São Paulo', 'SP', 1) ;
+INSERT INTO endereco VALUES (6, 'AV', 'Chaves', 777, 38023242, 'ap 52', 
+'Palmitel', 'Irati', 'PR', 1) ;
+INSERT INTO endereco VALUES (9, 'RUA', 'Espirito Santo', 45, 84500000, 
+' ', 'Vila São João', 'Irati', 'PR', 1) ;
+INSERT INTO endereco VALUES (7, 'RUA', 'Alberto Andaló', 777, 02840080, 
+'ap 52', 'Freguesia do Ó', 'São Paulo', 'SP', 1) ;
+INSERT INTO endereco VALUES (8, 'AV', 'João Paulo I', 587, 38023242, 
+'ap 39', 'Brasilândia', 'São Paulo', 'SP', 1) ;
+
+
+CREATE TABLE estoque 
+(
+  cod_suprimento INTEGER   NOT NULL,
+  nome VARCHAR (30)   NOT NULL,
+  descricao VARCHAR (30),
+  quantidade INTEGER   NOT NULL,
+  data_ultima_compra DATE   NOT NULL,
+  data_vencimento DATE,
+  tipo INTEGER,
+PRIMARY KEY(cod_suprimento));
+
+INSERT INTO estoque VALUES (1, 'gaze', 'gaze cirúrgica', 20, 
+'17/10/2010', '', '1');
+INSERT INTO estoque VALUES (2, 'seringa', 'seringa de injeção', 30, 
+'17/10/2010', '', '1');
+INSERT INTO estoque VALUES (3, 'peróxido de benzoíla', 'medicamento', 
+20, '17/10/2010', '17/10/2013', '2');
+INSERT INTO estoque VALUES (4, 'dipirona', 'medicamento', 20, 
+'17/10/2010', '17/10/2013', '2');
+INSERT INTO estoque VALUES (5, 'agulha', 'agulha', 20, '17/10/2010', 
+'17/10/2013', '1');
+
+CREATE TABLE exames 
+(
+  cod_exame INTEGER   NOT NULL,
+  nome VARCHAR (30),
+  duracao_aprox INTEGER,
+  PRIMARY KEY(cod_exame));
+
+INSERT INTO exames VALUES (1, 'hemograma', 5);
+INSERT INTO exames VALUES (2, 'teste ergométrico', 30);
+INSERT INTO exames VALUES (3, 'endoscopia', 120);
+
+
+CREATE TABLE medico 
+(
+  CRM INTEGER   NOT NULL,
+  especialidade VARCHAR (30),
+  formacao VARCHAR (30),
+  PRIMARY KEY(CRM));
+
+INSERT INTO medico VALUES (123, 'cardiologia', 'USP');
+INSERT INTO medico VALUES (456, 'dermatologia', 'UNESP');
+INSERT INTO medico VALUES (789, 'oftalmologista', 'FPM');
+INSERT INTO medico VALUES (0, '','');
+
+CREATE TABLE plano_de_saude 
+(
+  cod_plano INTEGER   NOT NULL,
+  nome_plano VARCHAR (30)  NOT NULL,
+  tipo INTEGER   NOT NULL,
+  cnpj VARCHAR (30),
+PRIMARY KEY(cod_plano));
+
+INSERT INTO plano_de_saude VALUES (100, 'Porto Seguro', 1, '123/500');
+INSERT INTO plano_de_saude VALUES (200, 'Porto Seguro', 2, '123/500');
+INSERT INTO plano_de_saude VALUES (300, 'UNIMED', 1, '456/800');
+
+CREATE TABLE telefone 
+(
+  cod_telefone INTEGER NOT NULL,
+  tipo INTEGER,
+  DDD INTEGER,
+  numero INTEGER,
+PRIMARY KEY(cod_telefone));
+
+INSERT INTO telefone VALUES (1, 1, 11, 38745120);
+INSERT INTO telefone VALUES (2, 2, 11, 38745240);
+INSERT INTO telefone VALUES (3, 3, 11, 38745360);
+INSERT INTO telefone VALUES (4, 1, 11, 71413321);
+INSERT INTO telefone VALUES (5, 1, 11, 71741024);
+INSERT INTO telefone VALUES (6, 1, 11, 71465424);
+INSERT INTO telefone VALUES (7, 1, 11, 71460004);
+INSERT INTO telefone VALUES (8, 1, 11, 73575424);
+INSERT INTO telefone VALUES (9, 1, 11, 98725424);
+
+CREATE TABLE cadastro_patologias 
+(
+  cod_patologia INTEGER   NOT NULL,
+  CID INTEGER,
+  descricao VARCHAR (30),
+PRIMARY KEY(cod_patologia));
+
+INSERT INTO cadastro_patologias VALUES (1, 1203, 'gripe');
+INSERT INTO cadastro_patologias VALUES (2, 1265, 'acne');
+INSERT INTO cadastro_patologias VALUES (3, 1287, 'conjuntivite');
+
+CREATE TABLE paciente 
+(
+  cod_paciente INTEGER   NOT NULL,
+  nome VARCHAR (50),
+  plano_de_saude_cod_plano INTEGER   NOT NULL,
+  cpf VARCHAR (11),
+  rg VARCHAR (9),
+  email VARCHAR (30),
+  data_nascimento DATE   NOT NULL,
+  profissao VARCHAR (30),
+  PRIMARY KEY(cod_paciente),
+  FOREIGN KEY(plano_de_saude_cod_plano)
+  REFERENCES plano_de_saude(cod_plano));
+    
+INSERT INTO paciente VALUES (1001,'camila', 200, '11111111111', 
+'222222222','camila@provedor.com.br', '05/05/1987' , 'analista 
+sistemas');
+INSERT INTO paciente VALUES (1002,'rafael', 200, '33333333333', 
+'444444444','rafael@provedor.com.br', '05/04/1986' , 'programador');
+INSERT INTO paciente VALUES (1003,'ana', 300, '55555555555', 
+'666666666','ana@provedor.com.br', '05/03/1985' , 'fonoaudióloga');
+    
+
+CREATE TABLE medicamentos 
+(
+  cod_medicamento INTEGER   NOT NULL ,
+  laboratório VARCHAR (30)   NOT NULL ,
+  nome VARCHAR (30)   NOT NULL ,
+  apresentacao VARCHAR (30)   NOT NULL ,
+  tipo VARCHAR (30)   NOT NULL ,
+  amostra VARCHAR (30)   NOT NULL   ,
+PRIMARY KEY(cod_medicamento));
+
+INSERT INTO medicamentos VALUES (9001, 'ache', 'peroxido de 
+benziíla','creme','peroxido de benziíla', 'S' );
+INSERT INTO medicamentos VALUES (9002, 
+'bayer','dipirona','comprimidos','dipirona', 'S' );
+INSERT INTO medicamentos VALUES (9003, 'nycomed','dramin 
+b6','comprimidos','cloridrato de piridoxina', 'S' );
+
+
+CREATE TABLE funcionario 
+(
+  matricula INTEGER   NOT NULL ,
+  medico_CRM INTEGER   NOT NULL ,
+  endereco_cod_endereco INTEGER   NOT NULL ,
+  data_admissao DATE   NOT NULL ,
+  departamento VARCHAR (30)   ,
+  salario DECIMAL    ,
+  nome VARCHAR (30)    ,
+  cpf VARCHAR (11)   ,
+  rg VARCHAR (9)   ,
+  email VARCHAR (30)      ,
+  PRIMARY KEY(matricula, medico_CRM),
+  FOREIGN KEY(medico_CRM)
+  REFERENCES medico(CRM),
+  FOREIGN KEY(endereco_cod_endereco)
+  REFERENCES endereco(cod_endereco));
+
+INSERT INTO  funcionario VALUES (1, 123, 1, '17/10/2010','atendimento 
+medico', 3000, 'jorge','12345678901','987654321', 
+'jorge@provedor.com.br' );
+INSERT INTO  funcionario VALUES (2, 456, 2, '16/09/2009','atendimento 
+medico', 3000, 'maria','92345678901','187654321', 
+'maria@provedor.com.br' );
+INSERT INTO  funcionario VALUES (3, 789, 3, '15/08/2008','atendimento 
+medico', 3000, 'jose','88345678901','227654321', 'jose@provedor.com.br' 
+);
+INSERT INTO  funcionario VALUES (4, 0, 4, '14/05/2010','atendimento', 
+1000, 'tiago','77745678901','333654321', 'tiago@provedor.com.br' );
+INSERT INTO  funcionario VALUES (5, 0, 5, '13/01/2010','atendimento', 
+1000, 'ramirez','66665678901','444454321', 'ramirez@provedor.com.br' );
+INSERT INTO  funcionario VALUES (6, 0, 6, '25/02/2010','atendimento', 
+1500, 'talita','55555678901','555554321', 'talita@provedor.com.br' );
+
+CREATE TABLE resultados 
+(
+  exames_cod_exame INTEGER   NOT NULL ,
+  cadastro_cod_patologia INTEGER   NOT NULL ,
+  cod_resultado INTEGER      ,
+  observacao VARCHAR (30),
+  PRIMARY KEY(exames_cod_exame, cadastro_cod_patologia),
+  FOREIGN KEY(exames_cod_exame)
+  REFERENCES exames(cod_exame),
+  FOREIGN KEY(cadastro_cod_patologia)
+  REFERENCES cadastro_patologias(cod_patologia));
+    
+INSERT INTO  resultados VALUES (1, 1, 1,'');
+INSERT INTO  resultados VALUES (2, 2, 0,'');
+INSERT INTO  resultados VALUES (3, 3, 1,'viral');
+
+CREATE TABLE exames_estoque 
+(
+  exames_cod_exame INTEGER   NOT NULL ,
+  estoque_cod_suprimento INTEGER   NOT NULL ,
+  quantidade_utilizada INTEGER      ,
+  PRIMARY KEY(exames_cod_exame, estoque_cod_suprimento),
+  FOREIGN KEY(exames_cod_exame)
+  REFERENCES exames(cod_exame),
+  FOREIGN KEY(estoque_cod_suprimento)
+  REFERENCES estoque(cod_suprimento));
+    
+INSERT INTO  exames_estoque VALUES (1, 1, 1 );
+INSERT INTO  exames_estoque VALUES (1, 2, 1 );
+INSERT INTO  exames_estoque VALUES (1, 5, 1 );
+INSERT INTO  exames_estoque VALUES (3, 5, 1 );
+INSERT INTO  exames_estoque VALUES (3, 2, 1 );    
+
+CREATE TABLE agenda 
+(
+  cod_agendamento INTEGER   NOT NULL ,
+  paciente_cod_paciente INTEGER   NOT NULL ,
+  medico_CRM INTEGER   NOT NULL ,
+  data_agendamento DATE NOT NULL     ,
+  hora VARCHAR(5) NOT NULL,
+  PRIMARY KEY(cod_agendamento),
+  FOREIGN KEY(medico_CRM)
+  REFERENCES medico(CRM),
+  FOREIGN KEY(paciente_cod_paciente)
+  REFERENCES paciente(cod_paciente));
+    
+INSERT INTO  agenda VALUES (1, 1001, 123, '07/11/2010', '11:00' );
+INSERT INTO  agenda VALUES (2, 1002, 456, '07/11/2010', '11:30' );
+INSERT INTO  agenda VALUES (3, 1003, 123, '07/11/2010', '12:00' );
+INSERT INTO  agenda VALUES (4, 1001, 123, '08/11/2010', '11:00' );
+INSERT INTO  agenda VALUES (5, 1002, 456, '08/11/2010', '11:30' );
+INSERT INTO  agenda VALUES (6, 1003, 123, '08/11/2010', '12:00' );
+INSERT INTO  agenda VALUES (7, 1001, 123, '09/11/2010', '11:00' );
+INSERT INTO  agenda VALUES (8, 1002, 456, '09/11/2010', '11:30' );
+INSERT INTO  agenda VALUES (9, 1003, 123, '09/11/2010', '12:00' );
+
+CREATE TABLE agenda_exames 
+(
+  agenda_cod_agendamento INTEGER   NOT NULL ,
+  exames_cod_exame INTEGER   NOT NULL   ,
+  PRIMARY KEY(agenda_cod_agendamento, exames_cod_exame),
+  FOREIGN KEY(agenda_cod_agendamento) REFERENCES agenda
+(cod_agendamento),
+  FOREIGN KEY(exames_cod_exame) REFERENCES exames(cod_exame));
+    
+INSERT INTO  agenda_exames VALUES (4, 1);
+INSERT INTO  agenda_exames VALUES (5, 2);
+INSERT INTO  agenda_exames VALUES (6, 1);
+
+CREATE TABLE medico_exames 
+(
+  medico_CRM INTEGER   NOT NULL ,
+  exames_cod_exame INTEGER   NOT NULL   ,
+  PRIMARY KEY(medico_CRM, exames_cod_exame),
+  FOREIGN KEY(medico_CRM)
+  REFERENCES medico(CRM),
+  FOREIGN KEY(exames_cod_exame)
+  REFERENCES exames(cod_exame));
+    
+INSERT INTO medico_exames VALUES(123,1);
+INSERT INTO medico_exames VALUES(123,2);
+
+
+CREATE TABLE procedimentos 
+(
+  cod_procedimento INTEGER   NOT NULL ,
+  agenda_cod_agendamento INTEGER   NOT NULL ,
+  nome VARCHAR (30)      ,
+  PRIMARY KEY(cod_procedimento),
+  FOREIGN KEY(agenda_cod_agendamento)
+  REFERENCES agenda(cod_agendamento));
+    
+INSERT INTO procedimentos VALUES (1, 7, 'curativo');
+INSERT INTO procedimentos VALUES (2, 8, 'remoção cisto');
+INSERT INTO procedimentos VALUES (3, 9, 'curativo');    
+
+CREATE TABLE consulta 
+(
+  cod_consulta INTEGER   NOT NULL ,
+  agenda_cod_agendamento INTEGER   NOT NULL ,
+  data_consulta DATE   NOT NULL   ,
+  PRIMARY KEY(cod_consulta, agenda_cod_agendamento),
+  FOREIGN KEY(agenda_cod_agendamento)
+  REFERENCES agenda(cod_agendamento));
+    
+INSERT INTO consulta VALUES (1, 1, '07/11/10');    
+INSERT INTO consulta VALUES (2, 2, '07/11/10');    
+INSERT INTO consulta VALUES (3, 3, '07/11/10');        
+
+CREATE TABLE procedimentos_estoque 
+(
+  procedimentos_cod_procedimento INTEGER   NOT NULL ,
+  estoque_cod_suprimento INTEGER   NOT NULL ,
+  quantidade INTEGER      ,
+  PRIMARY KEY(procedimentos_cod_procedimento, estoque_cod_suprimento),
+  FOREIGN KEY(procedimentos_cod_procedimento)
+  REFERENCES procedimentos(cod_procedimento),
+  FOREIGN KEY(estoque_cod_suprimento)
+  REFERENCES estoque(cod_suprimento));
+    
+INSERT INTO procedimentos_estoque VALUES (1,1,1);
+INSERT INTO procedimentos_estoque VALUES (2,1,5);
+INSERT INTO procedimentos_estoque VALUES (2,2,1);
+INSERT INTO procedimentos_estoque VALUES (2,5,1);
+INSERT INTO procedimentos_estoque VALUES (3,1,1);
+
+CREATE TABLE consulta_exames 
+(
+  agenda_cod_agendamento INTEGER   NOT NULL ,
+  consulta_cod_consulta INTEGER   NOT NULL ,
+  exames_cod_exame INTEGER   NOT NULL   ,
+  PRIMARY KEY(agenda_cod_agendamento, consulta_cod_consulta, 
+exames_cod_exame),
+  FOREIGN KEY(consulta_cod_consulta, agenda_cod_agendamento)
+  REFERENCES consulta(cod_consulta, agenda_cod_agendamento),
+  FOREIGN KEY(exames_cod_exame)
+  REFERENCES exames(cod_exame));
+    
+INSERT INTO consulta_exames VALUES (1,1,1);
+INSERT INTO consulta_exames VALUES (2,2,2);
+INSERT INTO consulta_exames VALUES (3,3,1);
+
+CREATE TABLE funcionario_has_telefone 
+(
+  funcionario_medico_CRM INTEGER   NOT NULL ,
+  funcionario_matricula INTEGER   NOT NULL ,
+  telefone_cod_telefone INTEGER   NOT NULL   ,
+  PRIMARY KEY(funcionario_medico_CRM, funcionario_matricula, 
+telefone_cod_telefone),
+  FOREIGN KEY(funcionario_matricula, funcionario_medico_CRM)
+  REFERENCES funcionario(matricula, medico_CRM),
+  FOREIGN KEY(telefone_cod_telefone)
+  REFERENCES telefone(cod_telefone));
+ 
+INSERT INTO funcionario_has_telefone VALUES (123,1,1); 
+INSERT INTO funcionario_has_telefone VALUES (456,2,2); 
+INSERT INTO funcionario_has_telefone VALUES (789,3,3); 
+INSERT INTO funcionario_has_telefone VALUES (0,4,4); 
+INSERT INTO funcionario_has_telefone VALUES (0,5,5); 
+INSERT INTO funcionario_has_telefone VALUES (0,6,6); 
+
+
+CREATE TABLE paciente_has_endereco 
+(
+  paciente_cod_paciente INTEGER   NOT NULL ,
+  endereco_cod_endereco INTEGER   NOT NULL   ,
+  PRIMARY KEY(paciente_cod_paciente, endereco_cod_endereco),
+  FOREIGN KEY(paciente_cod_paciente)
+  REFERENCES paciente(cod_paciente),
+  FOREIGN KEY(endereco_cod_endereco)
+  REFERENCES endereco(cod_endereco));
+    
+INSERT INTO paciente_has_endereco VALUES (1001,9);
+INSERT INTO paciente_has_endereco VALUES (1002,7);
+INSERT INTO paciente_has_endereco VALUES (1003,8);
+
+CREATE TABLE paciente_has_telefone 
+(
+  paciente_cod_paciente INTEGER   NOT NULL ,
+  telefone_cod_telefone INTEGER   NOT NULL   ,
+  PRIMARY KEY(paciente_cod_paciente, telefone_cod_telefone),
+  FOREIGN KEY(paciente_cod_paciente)
+  REFERENCES paciente(cod_paciente),
+  FOREIGN KEY(telefone_cod_telefone)
+  REFERENCES telefone(cod_telefone));
+    
+INSERT INTO paciente_has_telefone VALUES (1001,7);
+INSERT INTO paciente_has_telefone VALUES (1002,8);
+INSERT INTO paciente_has_telefone VALUES (1003,9);
+
+CREATE TABLE medico_procedimentos 
+(
+  medico_CRM INTEGER   NOT NULL ,
+  procedimentos_cod_procedimento INTEGER   NOT NULL   ,
+  PRIMARY KEY(medico_CRM, procedimentos_cod_procedimento),
+  FOREIGN KEY(medico_CRM)
+  REFERENCES medico(CRM),
+  FOREIGN KEY(procedimentos_cod_procedimento)
+  REFERENCES procedimentos(cod_procedimento));
+    
+INSERT INTO medico_procedimentos VALUES(123,1);
+INSERT INTO medico_procedimentos VALUES(456,2);
+INSERT INTO medico_procedimentos VALUES(789,1);
+
+CREATE TABLE receituario 
+(
+  cod_receituario INTEGER   NOT NULL ,
+  agenda_cod_agendamento INTEGER   NOT NULL ,
+  consulta_cod_consulta INTEGER   NOT NULL   ,
+  PRIMARY KEY(cod_receituario),
+  FOREIGN KEY(consulta_cod_consulta, agenda_cod_agendamento)
+  REFERENCES consulta(cod_consulta, agenda_cod_agendamento));
+    
+INSERT INTO receituario VALUES (100,1,1);
+INSERT INTO receituario VALUES (200,2,2);
+INSERT INTO receituario VALUES (300,3,3);
+
+CREATE TABLE receituario_patologias 
+(
+  cod_receituario INTEGER   NOT NULL ,
+  cadastro_cod_patologia INTEGER   NOT NULL   ,
+  PRIMARY KEY(cod_receituario, cadastro_cod_patologia),
+  FOREIGN KEY(cod_receituario)
+  REFERENCES receituario(cod_receituario),
+  FOREIGN KEY(cadastro_cod_patologia)
+  REFERENCES cadastro_patologias(cod_patologia));
+    
+INSERT INTO receituario_patologias VALUES (100,1);
+INSERT INTO receituario_patologias VALUES (200,2);
+INSERT INTO receituario_patologias VALUES (300,3);
+
+CREATE TABLE prescricao 
+(
+  cod_prescricao INTEGER   NOT NULL ,
+  cod_receituario INTEGER   NOT NULL ,
+  periodo INTEGER    ,
+  data_inicio DATE    ,
+  data_final DATE      ,
+  PRIMARY KEY(cod_prescricao),
+  FOREIGN KEY(cod_receituario)
+  REFERENCES receituario(cod_receituario));
+
+INSERT INTO prescricao VALUES (1, 100, 7, '07/11/2010','14/11/2010');
+INSERT INTO prescricao VALUES (2, 200, 30, '07/11/2010','07/12/2010');
+INSERT INTO prescricao VALUES (3, 300, 3, '07/11/2010','10/11/2010');
+    
+CREATE TABLE prescricao_medicamentos 
+(
+  prescricao_cod_prescricao INTEGER   NOT NULL ,
+  medicamentos_cod_medicamento INTEGER   NOT NULL   ,
+  PRIMARY KEY(prescricao_cod_prescricao, medicamentos_cod_medicamento),
+  FOREIGN KEY(prescricao_cod_prescricao)
+  REFERENCES prescricao(cod_prescricao),
+  FOREIGN KEY(medicamentos_cod_medicamento)
+  REFERENCES medicamentos(cod_medicamento));
+    
+INSERT INTO prescricao_medicamentos VALUES (1, 9001);
+INSERT INTO prescricao_medicamentos VALUES (2, 9001);
+INSERT INTO prescricao_medicamentos VALUES (3, 9003);
+
+
+--Consultas
+
+--Etapa 2 - Item 1
+select count(funcionario.nome)
+from funcionario INNER JOIN endereco
+ON (funcionario.endereco_cod_endereco = endereco.cod_endereco)
+WHERE (endereco.cidade = 'São Paulo');
+---------------------------------------------------------------------
+
+--Etapa 2 - Item 2
+select paciente.nome,
+       count(funcionario.nome) as atendimento
+from medico, agenda, paciente, funcionario
+where (funcionario.medico_crm = medico.crm
+  and funcionario.medico_crm = agenda.medico_crm
+  and paciente.cod_paciente = agenda.paciente_cod_paciente)
+group by paciente.nome
+having count(funcionario.nome) > 1
+order by paciente.nome asc;
+--------------------------------------------------------------------------
+
+--Etapa 2 - Item 3
+select medico.crm,
+       funcionario.nome,
+       funcionario.cpf,
+       funcionario.rg,
+       funcionario.email,
+       endereco.tipo_logradouro,
+       endereco.logradouro,
+       endereco.numero,
+       endereco.complemento,
+       endereco.cep,
+       endereco.bairro,
+       endereco.cidade,
+       endereco.uf,
+       telefone.ddd,
+       telefone.numero
+from medico,endereco, funcionario, funcionario_has_telefone, telefone
+where (funcionario.medico_crm = medico.crm
+  and funcionario.endereco_cod_endereco = endereco.cod_endereco
+  and medico.crm = funcionario_has_telefone.funcionario_medico_crm
+  and telefone.cod_telefone = 
+funcionario_has_telefone.telefone_cod_telefone
+  and funcionario.matricula = 
+funcionario_has_telefone.funcionario_matricula
+  and funcionario_medico_crm >0)
+ORDER BY medico.crm ASC;
+
+--Etapa 2 - Item 4
+select distinct paciente.nome as paciente,
+       funcionario.nome as medico,
+       agenda.cod_agendamento,
+       agenda.data_agendamento,
+       agenda.hora
+from medico, agenda, paciente, funcionario
+where funcionario.medico_crm IN (select medico.crm FROM medico)
+and funcionario.medico_crm IN (select agenda.medico_crm FROM agenda)
+and paciente.cod_paciente IN (select agenda.paciente_cod_paciente FROM 
+agenda)
+order by paciente.nome asc;
+  
+--Etapa 2 - Item 5 
+select P.nome as paciente,
+       F.nome as medico,
+       PP.nome as procedimento,
+       E.nome as suprimento,
+       PE.quantidade as quantidade
+       FROM funcionario F LEFT JOIN medico M
+       ON(F.medico_crm = M.CRM) 
+       RIGHT JOIN agenda AG ON(F.medico_crm=AG.medico_crm)
+       LEFT JOIN paciente P ON(P.cod_paciente = 
+       AG.paciente_cod_paciente) 
+      RIGHT JOIN Procedimentos PP ON (PP.agenda_cod_agendamento = 
+      AG.cod_agendamento)
+      Left JOIN Procedimentos_Estoque PE ON
+      (PE.procedimentos_cod_procedimento = PP.cod_procedimento)
+      Right JOIN Estoque E ON
+      (E.cod_suprimento=PE.estoque_cod_suprimento)
+      LEFT JOIN Medico_Procedimentos MP ON(MP.medico_crm=M.CRM);
+
+--Procedures
+
+-- Associa o plano ao paciente desejado
+create or replace procedure associa_plano(pcNomePLano varchar, 
+pnCodPaciente integer) is
+vnCodPlano plano_de_saude.cod_plano%TYPE;
+begin
+select cod_plano
+into  vnCodPlano
+from plano_de_saude 
+where nome_plano = pcNomePLano;
+
+update paciente 
+set plano_de_saude_cod_plano = vnCodPlano
+where cod_paciente = pncodpaciente;
+end;
+
+/
+
+BEGIN
+  associa_plano(pcNomePLano => 'UNIMED', pnCodPaciente => 1001);
+END;
+/
+
+SELECT *
+FROM paciente
+WHERE(cod_paciente=1001);
+
+
+-----------------------------------------------------------------
+
+
+-- Prescreve o medicamento de acordo com a prescricao criada
+create or replace procedure prescreve_medicamento(pnCodPrescricao 
+integer, pcMedicamento varchar) is
+vnCodMedicamento medicamentos.cod_medicamento%TYPE;
+begin
+select cod_medicamento
+into  vnCodMedicamento
+from medicamentos 
+where nome = pcMedicamento;
+insert into  prescricao_medicamentos (medicamentos_cod_medicamento, 
+prescricao_cod_prescricao) 
+values (vnCodMedicamento, pnCodPrescricao);
+end prescreve_medicamento;
+
+
+/
+
+BEGIN
+  prescreve_medicamento(pnCodPrescricao => 1, pcMedicamento => 'dipirona');
+END;
+/
+
+SELECT *
+FROM prescricao_medicamentos;
+-----------------------------------------------------------------------------------------
+--Triggers
+
+create or replace trigger atualiza_exame 
+BEFORE UPDATE OR DELETE on exames
+for each row
+begin
+  if updating then
+    if :new.duracao_aprox != :old.duracao_aprox then
+      update exames_estoque
+      set quantidade_utilizada = quantidade_utilizada * 2
+      where exames_cod_exame = :new.cod_Exame;
+    end if;
+  else
+    delete medico_exames
+    where exames_cod_exame = :new.cod_Exame;
+    delete exames_estoque
+    where exames_cod_exame = :new.cod_Exame;
+    delete resultados
+    where exames_cod_exame = :new.cod_Exame;
+    delete consulta_exames
+    where exames_cod_exame = :new.cod_Exame;
+    delete agenda_exames
+    where exames_cod_exame = :new.cod_Exame;
+  end if;
+end;
+
+UPDATE exames
+SET nome ='eletrocardiograma',duracao_aprox=10
+WHERE(cod_exame=1);
+
+SELECT *
+FROM exames;
+
+SELECT *
+FROM exames_estoque;
+
+UPDATE exames
+SET nome ='Teste DPI',duracao_aprox=120
+WHERE(cod_exame=3);
+
+SELECT *
+FROM exames;
+
+SELECT *
+FROM medico_exames;
+
+SELECT *
+FROM exames_estoque;
+
+SELECT *
+FROM resultados;
+
+SELECT *
+FROM consulta_exames;
+
+SELECT *
+FROM agenda_exames;
+
+
+--------------------------------------------------------------
+--Tabelas da Trigger Insere_FuncN_Up_Sal
+
+CREATE TABLE Historico_Salario ( 
+Cod_Func INTEGER, 
+Salario_Antigo INTEGER, 
+Salario_Atual INTEGER, 
+PRIMARY KEY(Cod_Func)); 
+
+CREATE TABLE Func_NMedicos ( 
+Cod_Func INTEGER,
+Nome_Func VARCHAR(60),
+Nome_Dept VARCHAR(60),
+PRIMARY KEY(Cod_Func)); 
+
+
+
+CREATE OR REPLACE TRIGGER Insere_FuncN_Up_Sal
+BEFORE 
+INSERT OR UPDATE
+ON Funcionario 
+FOR EACH ROW 
+Begin 
+IF inserting THEN
+ if :new.medico_CRM = 0 then 
+ INSERT 
+ INTO Func_NMedicos (Cod_Func,Nome_Func,Nome_Dept) 
+ VALUES (:new.matricula,:new.nome,:new.departamento); 
+end if;
+ELSIF updating THEN 
+ INSERT 
+ INTO Historico_Salario (Cod_Func, Salario_Antigo, Salario_Atual) 
+ VALUES (:old.matricula, :old.Salario, :new.Salario); 
+END IF; 
+End;
+/
+show error;
+/
+
+INSERT INTO  funcionario VALUES (7, 0, 7, to_date('13-JUN-10', 'dd-mon-yy'),'almoxarife',1500, 'Arnaldo Cesar','55555678901','555554321','arnaldo@provedor.com.br' );
+
+SELECT *
+FROM Func_NMedicos;
+
+
+UPDATE Funcionario
+SET Salario = Salario+500
+Where(matricula=7);
+
+SELECT *
+FROM Historico_Salario;
+
+
+
+
+-----------------------------------------------------------------------
+
